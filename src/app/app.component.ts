@@ -14,6 +14,7 @@ export class AppComponent {
   rowData;
   columnDefs: ColDef[];
   defaultColDef;
+  pinnedBottomRowData: any[];
   autoGroupColumnDef;
   groupDefaultExpanded;
   getDataPath;
@@ -47,6 +48,7 @@ export class AppComponent {
     }
   }
   constructor() {
+    this.pinnedBottomRowData = this.createData(1, 'Bottom');
     this.rowData = [
       {
         orgHierarchy: ['Erica Rogers'],
@@ -336,5 +338,20 @@ export class AppComponent {
   onGridReady(params) {
     this.gridApi = params.api;
     this.gridColumnApi = params.columnApi;
+  }
+
+  createData(count, prefix) {
+    var result = [];
+    for (var i = 0; i < count; i++) {
+      result.push({
+        athlete: prefix + ' Athlete ' + i,
+        age: prefix + ' Age ' + i,
+        country: prefix + ' Country ' + i,
+        year: prefix + ' Year ' + i,
+        date: prefix + ' Date ' + i,
+        sport: prefix + ' Sport ' + i,
+      });
+    }
+    return result;
   }
 }
