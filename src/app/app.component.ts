@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { ColDef } from 'ag-grid-community';
+import 'ag-grid-enterprise';
 
 @Component({
   selector: 'app-root',
@@ -11,11 +11,25 @@ export class AppComponent {
   gridColumnApi;
 
   rowData;
-  columnDefs: ColDef[];
+  columnDefs;
   defaultColDef;
   autoGroupColumnDef;
   groupDefaultExpanded;
   getDataPath;
+  sideBar: {
+    toolPanels: {
+      id: string;
+      labelDefault: string;
+      labelKey: string;
+      iconKey: string;
+      toolPanel: string;
+      minWidth: number;
+      maxWidth: number;
+      width: number;
+    }[];
+    position: string;
+    defaultToolPanel: string;
+  };
 
   constructor() {
     this.rowData = [
@@ -255,6 +269,34 @@ export class AppComponent {
     ];
     this.columnDefs = [{ field: 'jobTitle' }, { field: 'employmentType' }];
     this.defaultColDef = { flex: 1 };
+
+    this.sideBar = {
+      toolPanels: [
+        {
+          id: 'columns',
+          labelDefault: 'Columns',
+          labelKey: 'columns',
+          iconKey: 'columns',
+          toolPanel: 'agColumnsToolPanel',
+          minWidth: 225,
+          maxWidth: 225,
+          width: 225,
+        },
+        {
+          id: 'filters',
+          labelDefault: 'Filters',
+          labelKey: 'filters',
+          iconKey: 'filter',
+          toolPanel: 'agFiltersToolPanel',
+          minWidth: 180,
+          maxWidth: 400,
+          width: 250,
+        },
+      ],
+      position: 'right',
+      defaultToolPanel: 'filters',
+    };
+
     this.autoGroupColumnDef = {
       headerName: 'Organisation Hierarchy',
       minWidth: 300,
