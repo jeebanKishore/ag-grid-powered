@@ -1,9 +1,25 @@
-<ag-grid-angular
-  style="width: 500px; height: 500px"
-  class="ag-theme-alpine"
-  [rowData]="rowData"
-  [columnDefs]="columnDefs"
->
-</ag-grid-angular>
-
-<router-outlet></router-outlet>
+<div class="example-wrapper">
+  <div style="margin-bottom: 5px">
+    <input
+      type="text"
+      id="filter-text-box"
+      placeholder="Filter..."
+      (input)="onFilterTextBoxChanged()"
+    />
+  </div>
+  <ag-grid-angular
+    #agGrid
+    style="width: 98vw; height: 90vh"
+    id="myGrid"
+    class="ag-theme-alpine"
+    [rowData]="rowData"
+    [columnDefs]="columnDefs"
+    [defaultColDef]="defaultColDef"
+    [autoGroupColumnDef]="autoGroupColumnDef"
+    [treeData]="true"
+    [animateRows]="true"
+    [groupDefaultExpanded]="groupDefaultExpanded"
+    [getDataPath]="getDataPath"
+    (gridReady)="onGridReady($event)"
+  ></ag-grid-angular>
+</div>
