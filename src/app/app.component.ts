@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { ColDef } from 'ag-grid-community';
 import 'ag-grid-enterprise';
 
 @Component({
@@ -11,7 +12,7 @@ export class AppComponent {
   gridColumnApi;
 
   rowData;
-  columnDefs;
+  columnDefs: ColDef[];
   defaultColDef;
   autoGroupColumnDef;
   groupDefaultExpanded;
@@ -31,6 +32,20 @@ export class AppComponent {
     defaultToolPanel: string;
   };
 
+  valueForamtter(params: { value: any }) {
+    try {
+      let floatAmount = parseFloat(params.value);
+      if (floatAmount > 0) {
+        var formatter = new Intl.NumberFormat('en-US', {
+          style: 'currency',
+          currency: 'USD',
+        });
+        return formatter.format(floatAmount);
+      } else return '$30,000';
+    } catch (error) {
+      return '$30,000';
+    }
+  }
   constructor() {
     this.rowData = [
       {
@@ -267,7 +282,11 @@ export class AppComponent {
         salary: 15000,
       },
     ];
-    this.columnDefs = [{ field: 'jobTitle' }, { field: 'employmentType' }];
+    this.columnDefs = [
+      { field: 'jobTitle', sortable: true },
+      { field: 'employmentType', sortable: true },
+      { field: 'salary', sortable: true, valueFormatter: this.valueForamtter },
+    ];
     this.defaultColDef = { flex: 1 };
 
     this.sideBar = {
