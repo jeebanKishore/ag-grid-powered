@@ -15,6 +15,8 @@ export class AppComponent {
   columnDefs: ColDef[];
   defaultColDef;
   pinnedBottomRowData: any[];
+  isFullWidthCell: any;
+  fullWidthCellRenderer: any;
   autoGroupColumnDef;
   groupDefaultExpanded;
   getDataPath;
@@ -48,7 +50,7 @@ export class AppComponent {
     }
   }
   constructor() {
-    this.pinnedBottomRowData = this.createData(1, 'Bottom');
+    this.pinnedBottomRowData = this.createData(1, 'pinned');
     this.rowData = [
       {
         orgHierarchy: ['Erica Rogers'],
@@ -327,6 +329,23 @@ export class AppComponent {
     this.getDataPath = function (data) {
       return data.orgHierarchy;
     };
+    this.isFullWidthCell = function (rowNode) {
+      return rowNode.rowPinned;
+    };
+    this.fullWidthCellRenderer = function (params) {
+      // let cssClass;
+      // let message;
+      // if (params.node.rowPinned) {
+      //   cssClass = 'example-full-width-pinned-row';
+      //   message = 'Pinned full width row at index ' + params.rowIndex;
+      // } else {
+      //   cssClass = 'example-full-width-row';
+      //   message = 'Normal full width row at index' + params.rowIndex;
+      // }
+      const eDiv = document.createElement('div');
+     
+      return eDiv;
+    };
   }
 
   onFilterTextBoxChanged() {
@@ -338,20 +357,36 @@ export class AppComponent {
   onGridReady(params) {
     this.gridApi = params.api;
     this.gridColumnApi = params.columnApi;
+    this.getRowData();
   }
 
   createData(count, prefix) {
-    var result = [];
-    for (var i = 0; i < count; i++) {
-      result.push({
-        athlete: prefix + ' Athlete ' + i,
-        age: prefix + ' Age ' + i,
-        country: prefix + ' Country ' + i,
-        year: prefix + ' Year ' + i,
-        date: prefix + ' Date ' + i,
-        sport: prefix + ' Sport ' + i,
-      });
+    const rowData = [];
+    for (let i = 0; i < count; i++) {
+      const item = { letter: 'a' };
+
+
+      rowData.push(item);
     }
-    return result;
+    return rowData;
   }
+
+  getRowData() {
+    let rowData = [];
+    let string = '';
+    this.gridApi.forEachNode(node => {console.log(node);rowData.push(node.data.jobTitle)});
+    let counts = rowData.reduce(function(obj, b) {
+      obj[b] = ++obj[b] || 1;
+      return obj;
+    }, {});
+    for (const [key, value] of Object.entries(counts)) {
+      string+= `(${value})${key},`
+    }
+    const eDiv = document.createElement('div');
+    eDiv.innerText = string.slice(0, -1);
+    this.fullWidthCellRenderer = eDiv;
+    console.log(eDiv);
+  }
+  
+
 }
