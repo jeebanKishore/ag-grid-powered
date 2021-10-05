@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { ColDef } from 'ag-grid-community';
+import { ColDef, GridApi } from 'ag-grid-community';
 import 'ag-grid-enterprise';
 
 @Component({
@@ -11,7 +11,14 @@ export class AppComponent {
   gridApi;
   gridColumnApi;
 
-  rowData;
+  rowData: {
+    orgHierarchy: string[];
+    jobTitle: string;
+    employmentType: string;
+    salary?: string | number;
+    id: number;
+    pairedId?: number;
+  }[];
   columnDefs: ColDef[];
   defaultColDef;
   pinnedBottomRowData: any[];
@@ -44,13 +51,12 @@ export class AppComponent {
           currency: 'USD',
         });
         return formatter.format(floatAmount);
-      } else return '$30,000';
+      } else return '$30,000.00';
     } catch (error) {
-      return '$30,000';
+      return '$30,000.00';
     }
   }
   constructor() {
-    this.pinnedBottomRowData = this.createData(1, 'pinned');
     this.rowData = [
       {
         orgHierarchy: ['Erica Rogers'],
@@ -333,17 +339,17 @@ export class AppComponent {
       return rowNode.rowPinned;
     };
     this.fullWidthCellRenderer = function (params) {
-      // let cssClass;
-      // let message;
-      // if (params.node.rowPinned) {
-      //   cssClass = 'example-full-width-pinned-row';
-      //   message = 'Pinned full width row at index ' + params.rowIndex;
-      // } else {
-      //   cssClass = 'example-full-width-row';
-      //   message = 'Normal full width row at index' + params.rowIndex;
-      // }
+      let string = '';
+
       const eDiv = document.createElement('div');
-     
+
+      for (const [key, value] of Object.entries(params.data)) {
+        console.log(key, value);
+
+        string += `(${value})${key},`;
+      }
+      eDiv.innerText = string.slice(0, -1);
+
       return eDiv;
     };
   }
@@ -357,36 +363,19 @@ export class AppComponent {
   onGridReady(params) {
     this.gridApi = params.api;
     this.gridColumnApi = params.columnApi;
-    this.getRowData();
-  }
-
-  createData(count, prefix) {
-    const rowData = [];
-    for (let i = 0; i < count; i++) {
-      const item = { letter: 'a' };
-
-
-      rowData.push(item);
-    }
-    return rowData;
+    this.pinnedBottomRowData = this.getRowData();
   }
 
   getRowData() {
     let rowData = [];
-    let string = '';
-    this.gridApi.forEachNode(node => {console.log(node);rowData.push(node.data.jobTitle)});
-    let counts = rowData.reduce(function(obj, b) {
+
+    this.rowData.forEach((element) => {
+      rowData.push(element.jobTitle);
+    });
+    let counts = rowData.reduce(function (obj, b) {
       obj[b] = ++obj[b] || 1;
       return obj;
     }, {});
-    for (const [key, value] of Object.entries(counts)) {
-      string+= `(${value})${key},`
-    }
-    const eDiv = document.createElement('div');
-    eDiv.innerText = string.slice(0, -1);
-    this.fullWidthCellRenderer = eDiv;
-    console.log(eDiv);
+    return [counts];
   }
-  
-
 }
