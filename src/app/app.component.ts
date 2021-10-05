@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { ColDef, GridApi } from 'ag-grid-community';
 import 'ag-grid-enterprise';
+import { ButtonDisplayComponent } from './button-display/button-display.component';
 
 @Component({
   selector: 'app-root',
@@ -55,6 +56,27 @@ export class AppComponent {
     } catch (error) {
       return '$30,000.00';
     }
+  }
+
+  buttonDisplay(params){
+    console.log(params)
+      let cssClass;
+      let message;
+        cssClass = 'example-full-width-row';
+        message = 'Normal full width row at index' + params.rowIndex;
+      
+      const eDiv = document.createElement('div');
+      eDiv.innerHTML =
+        '<div class="' +
+        cssClass +
+        '"><button>Click</button> ' +
+        message +
+        '</div>';
+      const eButton = eDiv.querySelector('button');
+      eButton.addEventListener('click', function () {
+        alert('button clicked');
+      });
+      return eDiv;
   }
   constructor() {
     this.rowData = [
@@ -296,6 +318,7 @@ export class AppComponent {
       { field: 'jobTitle', sortable: true },
       { field: 'employmentType', sortable: true },
       { field: 'salary', sortable: true, valueFormatter: this.valueForamtter },
+      { field: 'action', cellRenderer: 'buttonDisplayComponent' },
     ];
     this.defaultColDef = { flex: 1 };
 
@@ -344,12 +367,9 @@ export class AppComponent {
       const eDiv = document.createElement('div');
 
       for (const [key, value] of Object.entries(params.data)) {
-        console.log(key, value);
-
-        string += `(${value})${key},`;
+        string += ` (${value})${key},`;
       }
       eDiv.innerText = string.slice(0, -1);
-
       return eDiv;
     };
   }
@@ -366,9 +386,12 @@ export class AppComponent {
     this.pinnedBottomRowData = this.getRowData();
   }
 
+  frameworkComponents = {
+    buttonDisplayComponent: ButtonDisplayComponent
+  }
+
   getRowData() {
     let rowData = [];
-
     this.rowData.forEach((element) => {
       rowData.push(element.jobTitle);
     });
