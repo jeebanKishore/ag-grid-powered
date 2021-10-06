@@ -8,7 +8,7 @@ import { ButtonsModule } from '@progress/kendo-angular-buttons';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ButtonDisplayComponent } from './button-display/button-display.component';
 
-
+import { ButtonModule } from '@progress/kendo-angular-buttons';
 
 
 @NgModule({
@@ -18,10 +18,10 @@ import { ButtonDisplayComponent } from './button-display/button-display.componen
   ],
   imports: [
     BrowserModule,
+    BrowserAnimationsModule,
     AppRoutingModule,
     AgGridModule.withComponents([ButtonDisplayComponent]), // Add all cell renderer components to this collection
     ButtonsModule,
-    BrowserAnimationsModule
   ],
   providers: [],
   bootstrap: [AppComponent]
