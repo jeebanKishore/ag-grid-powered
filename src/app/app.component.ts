@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { ColDef, GridApi } from 'ag-grid-community';
+import { ColDef, GridApi, RowNode } from 'ag-grid-community';
 import 'ag-grid-enterprise';
 import { ButtonDisplayComponent } from './button-display/button-display.component';
 
@@ -11,7 +11,7 @@ import { ButtonDisplayComponent } from './button-display/button-display.componen
 export class AppComponent {
   gridApi;
   gridColumnApi;
-
+  groupMaintainOrder = true;
   rowData: {
     orgHierarchy: string[];
     jobTitle: string;
@@ -58,25 +58,25 @@ export class AppComponent {
     }
   }
 
-  buttonDisplay(params){
+  buttonDisplay(params) {
     console.log(params)
-      let cssClass;
-      let message;
-        cssClass = 'example-full-width-row';
-        message = 'Normal full width row at index' + params.rowIndex;
-      
-      const eDiv = document.createElement('div');
-      eDiv.innerHTML =
-        '<div class="' +
-        cssClass +
-        '"><button>Click</button> ' +
-        message +
-        '</div>';
-      const eButton = eDiv.querySelector('button');
-      eButton.addEventListener('click', function () {
-        alert('button clicked');
-      });
-      return eDiv;
+    let cssClass;
+    let message;
+    cssClass = 'example-full-width-row';
+    message = 'Normal full width row at index' + params.rowIndex;
+
+    const eDiv = document.createElement('div');
+    eDiv.innerHTML =
+      '<div class="' +
+      cssClass +
+      '"><button>Click</button> ' +
+      message +
+      '</div>';
+    const eButton = eDiv.querySelector('button');
+    eButton.addEventListener('click', function () {
+      alert('button clicked');
+    });
+    return eDiv;
   }
   constructor() {
     this.rowData = [
@@ -315,9 +315,9 @@ export class AppComponent {
       },
     ];
     this.columnDefs = [
-      { field: 'jobTitle', sortable: true },
-      { field: 'employmentType', sortable: true },
-      { field: 'salary', sortable: true, valueFormatter: this.valueForamtter },
+      { field: 'jobTitle', sortable: true, comparator: this.keepPairedID },
+      { field: 'employmentType', sortable: true, comparator: this.keepPairedID },
+      { field: 'salary', sortable: true, valueFormatter: this.valueForamtter, comparator: this.keepPairedID },
       { field: 'action', cellRenderer: 'buttonDisplayComponent' },
     ];
     this.defaultColDef = { flex: 1 };
@@ -372,6 +372,12 @@ export class AppComponent {
       eDiv.innerText = string.slice(0, -1);
       return eDiv;
     };
+  }
+
+  keepPairedID = (valueA, valueB, nodeA: RowNode, nodeB: RowNode, isInverted) => {
+    console.log(valueA, valueB, nodeA, nodeB, isInverted);
+    if (nodeA.data?.pairedId == nodeB.data?.pairedId) return 0;
+    return (nodeA.data?.pairedId > nodeB.data?.pairedId) ? 1 : -1;
   }
 
   onFilterTextBoxChanged() {

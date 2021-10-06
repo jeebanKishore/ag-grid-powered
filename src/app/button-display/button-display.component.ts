@@ -8,24 +8,26 @@ import { ICellRendererParams } from '@ag-grid-community/all-modules';
 })
 export class ButtonDisplayComponent implements AgRendererComponent {
   data: ICellRendererParams;
-  isButtonvisible: boolean;
+  isButtonVisible: boolean;
+  buttonText:string = 'Expand';
   constructor() { }
 
   ngOnInit(): void {
   }
 
   agInit(params: ICellRendererParams): void {
-    console.log(params)
     this.data = params;
-    this.isButtonvisible = this.data.node.hasChildren();
+    this.isButtonVisible = this.data.node.hasChildren();
+    (this.data.node.expanded)? this.buttonText = 'Collapse' : this.buttonText = 'Expand';
   }
 
   refresh(params) {
-    return false;
+    return true;
   }
 
   toggleTreState() {
     this.data.node.setExpanded(!this.data.node.expanded);
+    (this.data.node.expanded === true)? this.buttonText = 'Collapse' : this.buttonText = 'Expand';
   }
 
 }
