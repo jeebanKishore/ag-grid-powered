@@ -432,7 +432,7 @@ export class AppComponent {
    * Use pptxgenjs to create PPT and add the image into that
    * Make that ppt download
    */
-  downloadasImage() {
+  downloadAsImage() {
     this.showPreloader = true;
       this.gridApi.setSideBarVisible(false);
   
