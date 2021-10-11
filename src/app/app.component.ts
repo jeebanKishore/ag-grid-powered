@@ -425,29 +425,34 @@ export class AppComponent {
     }, {});
     return [counts];
   }
-/**
- * Download logic starts from here
- * Use Html2canvas to get high quality snapshot of the canvas
- * 
- * Use pptxgenjs to create PPT and add the image into that
- * Make that ppt download
- */
+  /**
+   * Download logic starts from here
+   * Use Html2canvas to get high quality snapshot of the canvas
+   * 
+   * Use pptxgenjs to create PPT and add the image into that
+   * Make that ppt download
+   */
   downloadasImage() {
     this.showPreloader = true;
-    html2canvas(this.screen.nativeElement, {scale: 5,
+      this.gridApi.setSideBarVisible(false);
+  
+    html2canvas(this.screen.nativeElement, {
+      scale: 5,
       logging: false,
       removeContainer: true,
       useCORS: true,
-      allowTaint: false}).then(canvas => {
+      allowTaint: false
+    }).then(canvas => {
       //this.canvas.nativeElement.src = canvas.toDataURL();
       // this.downloadLink.nativeElement.href = canvas.toDataURL('image/png');
       // this.downloadLink.nativeElement.download = 'marble-diagram.png';
       // this.downloadLink.nativeElement.click();
       let pres = new pptxgen();
       let slide = pres.addSlide();
-      slide.addImage({ path: canvas.toDataURL('image/png'), x: '1%', y: '1%', w: '95%', h:'95%' });
-    pres.writeFile({ fileName: "Sample Presentation.pptx" });
-    this.showPreloader = false;
+      slide.addImage({ path: canvas.toDataURL('image/png'), x: '1%', y: '1%', w: '95%', h: '95%' });
+      pres.writeFile({ fileName: "Sample Presentation.pptx" });
+      this.gridApi.setSideBarVisible(true);
+      this.showPreloader = false;
     });
   }
 }
