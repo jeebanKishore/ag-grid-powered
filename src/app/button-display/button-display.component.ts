@@ -22,7 +22,6 @@ export class ButtonDisplayComponent implements AgRendererComponent {
   }
 
   refresh(params) {
-    console.log(params);
     return true;
   }
 

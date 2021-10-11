@@ -77,7 +77,6 @@ export class AppComponent {
   }
 
   buttonDisplay(params) {
-    console.log(params)
     let cssClass;
     let message;
     cssClass = 'example-full-width-row';
@@ -393,7 +392,6 @@ export class AppComponent {
   }
 
   keepPairedID = (valueA, valueB, nodeA: RowNode, nodeB: RowNode, isInverted) => {
-    console.log(valueA, valueB, nodeA, nodeB, isInverted);
     if (nodeA.data?.pairedId == nodeB.data?.pairedId) return 0;
     return (nodeA.data?.pairedId > nodeB.data?.pairedId) ? 1 : -1;
   }
